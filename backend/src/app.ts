@@ -24,9 +24,12 @@ app.use(cookieParser())
 
 //rouesetup
 import UserRouter from "./router/users.routes.js"
-
+import ContentRouter from "./router/content.route.js"
+import ShareRouter from "./router/share.route.js"
 
 app.use("/api/auth",UserRouter)
+app.use("/api/content",ContentRouter)
+app.use("/api/brain",ShareRouter)
 
 
 
