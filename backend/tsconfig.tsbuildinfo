@@ -1,1 +1,0 @@
-{"root":["./src/app.ts","./src/index.ts","./src/controllers/user.controller.ts","./src/router/users.routes.ts","./src/utils/password.ts","./src/utils/token.ts"],"version":"5.7.3"}
