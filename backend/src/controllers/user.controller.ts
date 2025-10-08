@@ -70,12 +70,19 @@ export const registerUser=async(req:Request,res:Response):Promise<void>=>{
         }
     })
 
+    const newUser={
+
+        username:user.username,
+        email:user.email
+
+    }
+
     if(!user){
         res.status(400).json({message:"unable to create user"})
         return
 
     }else{
-        res.status(200).json({message:"user created successfully",user})
+        res.status(200).json({message:"user created successfully",newUser})
         return
     }
 
@@ -141,7 +148,8 @@ export const loginUser=async(req:Request,res:Response):Promise<Response>=>{
     //collect user detail to return in res.
     return res.status(200).json({
         message:"User logged in successfully",
-        user
+        user,
+        accessToken
 
     }).cookie("accessToken",accessToken,options)
 }

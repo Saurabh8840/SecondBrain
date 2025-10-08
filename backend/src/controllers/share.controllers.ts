@@ -20,6 +20,10 @@ export const shareAll = async (req: Request, res: Response) => {
     console.error(err);
     res.status(500).json({ message: "Error creating share link" });
   }
+     
+
+
+
 };
 
 export const shareOne = async (req: Request, res: Response) => {
@@ -39,6 +43,8 @@ export const shareOne = async (req: Request, res: Response) => {
     console.error(err);
     res.status(500).json({ message: "Error creating share link" });
   }
+
+
 };
 
 export const openShareLink = async (req: Request, res: Response) => {
@@ -70,4 +76,8 @@ export const openShareLink = async (req: Request, res: Response) => {
     console.error(err);
     res.status(500).json({ message: "Error fetching shared content" });
   }
+
+       
 };
+
+
