@@ -39,21 +39,27 @@ model Content{
   type ContentType
   link  String
   title String 
-  tags  Tags[]
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   authorId Int
   links  Link[]
   author  User   @relation(fields:[authorId],references: [id])
-
+  //tags have many to many realtionsip that's why i write like this not lke this tags  Tags[]
+  tags Tags[] @relation("ContentTags")
   
 }
 
 model Tags{
   id Int @id @default(autoincrement())
   title String @unique
-  contentId Int
-  content Content @relation(fields: [contentId],references: [id])
+  //here content is many to many realtionship  so that's why i commented 
+  // contentId Int
+  // content Content @relation(fields: [contentId],references: [id])
+
+  //new line
+  contents Content[] @relation("ContentTags")
+  //here Content Tags stablish the realtionships
 }
 
 model Link{
