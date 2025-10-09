@@ -8,7 +8,7 @@ app.use(express.json())
 
 //cors to allow domain from this origin and also thier cookies 
 app.use(cors({
-    origin:process.env.CORS_ORIGIN,
+    origin:'http://localhost:5173',
     credentials:true
 }))
 
