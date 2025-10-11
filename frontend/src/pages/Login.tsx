@@ -38,11 +38,11 @@ const Login = () => {
       console.error("Login error:",error);
 
       if (axios.isAxiosError(error)) {
-      // ✅ if backend responded with error message
+      
       if (error.response && error.response.data?.message) {
         alert(error.response.data.message);
       } 
-      // ✅ if backend sent Zod validation errors
+      
       else if (error.response && error.response.data?.errors) {
         const messages = error.response.data.errors.map((e: any) => e.message).join("\n");
         alert(messages);
