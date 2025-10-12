@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/dashboard/Sidebar';
 import ContentCard from '../components/dashboard/ContentCard';
 import AddContentModal from '../components/dashboard/AddContentModel';
 import ShareModal from '../components/dashboard/ShareModel';
 import AnimatedBackground from '../components/dashboard/AnimatedBackground';
 import type { Content } from '../types';
+import axios from 'axios';
 
 const demoContents: Content[] = [
   // same demo content array as original
@@ -57,6 +58,17 @@ const demoContents: Content[] = [
     createdAt: '2024-08-20T00:00:00Z'
   }
 ];
+
+useEffect(()=>{
+   
+
+  const fetchData=async()=>{
+     
+    const response=await axios.post('http://localhost:3000/content');
+
+  }
+},[])
+
 
 const Dashboard = () => {
   const [contents, setContents] = useState<Content[]>(demoContents);
