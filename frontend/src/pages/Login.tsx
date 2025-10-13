@@ -29,7 +29,8 @@ const Login = () => {
         const data=res.data;
 
         //store token
-        localStorage.setItem("token",data.token);
+        localStorage.setItem("token",data.accessToken);
+        // console.log("Saved token:", localStorage.getItem("token"));
 
         navigate("/dashboard");
       }
@@ -47,7 +48,6 @@ const Login = () => {
         const messages = error.response.data.errors.map((e: any) => e.message).join("\n");
         alert(messages);
       } 
-      // ✅ fallback
       else {
         alert("Login failed. Please check your credentials.");
       }

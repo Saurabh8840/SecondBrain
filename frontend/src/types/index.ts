@@ -28,12 +28,28 @@ export interface SignupCredentials {
   password: string;
 }
 
+export interface Tags {
+  id: string;
+  title: string;
+}
+
+export interface Tags{
+  id: string;
+  title: string;
+}
+
 
 export interface Content {
-  _id: string;
+  id: string;
   title: string;
-  type: 'tweet' | 'video' | 'document' | 'link';
+  // type: 'tweet' | 'video' | 'document' | 'link';
+  type:'image'|'video'|'article'|'audio'
   link: string;
-  tags: string[];
+  tags: Tags[];
   createdAt: string;
 }
+
+// image
+//   video
+//   article
+//   audio

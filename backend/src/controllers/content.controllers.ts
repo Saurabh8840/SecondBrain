@@ -8,7 +8,7 @@ const prisma=new PrismaClient();
 export const addContent=async(req:Request,res:Response)=>{
 
     const contentSchema = z.object({
-  type: z.enum(["image", "video", "article", "audio"]),
+  type: z.enum(["tweet", "video", "document", "link"]),
   link: z.url(),
   title: z.string().min(1).max(200),
   tags: z.array(z.string().min(1)) // array of strings
@@ -51,7 +51,7 @@ const { type, link, title, tags } = parsed.data;
     res.status(201).json(content)
     } catch (error) {
         console.error(error);
-        res.status(400).json({message:"something went wrong"})
+        res.status(400).json({message:"something went wrong unable to add content"})
     }
 
 
