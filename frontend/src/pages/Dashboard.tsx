@@ -4,80 +4,52 @@ import ContentCard from '../components/dashboard/ContentCard';
 import AddContentModal from '../components/dashboard/AddContentModel';
 import ShareModal from '../components/dashboard/ShareModel';
 import AnimatedBackground from '../components/dashboard/AnimatedBackground';
-import type { Content } from '../types';
+import type { Content,Tags } from '../types';
 import axios from 'axios';
 
-const demoContents: Content[] = [
-  // same demo content array as original
-  {
-    _id: '1',
-    title: 'Future Projects',
-    type: 'document',
-    link: 'https://example.com/projects',
-    tags: ['productivity', 'ideas'],
-    createdAt: '2024-10-03T00:00:00Z'
-  },
-  {
-    _id: '2',
-    title: 'How to Build a Second Brain',
-    type: 'video',
-    link: 'https://youtube.com/watch?v=example',
-    tags: ['productivity', 'learning'],
-    createdAt: '2024-09-03T00:00:00Z'
-  },
-  {
-    _id: '3',
-    title: 'Productivity Tip',
-    type: 'tweet',
-    link: 'https://twitter.com/user/status/123',
-    tags: ['productivity', 'learning'],
-    createdAt: '2024-08-03T00:00:00Z'
-  },
-  {
-    _id: '4',
-    title: 'React Best Practices',
-    type: 'document',
-    link: 'https://example.com/react-guide',
-    tags: ['coding', 'react'],
-    createdAt: '2024-10-05T00:00:00Z'
-  },
-  {
-    _id: '5',
-    title: 'Design Inspiration',
-    type: 'link',
-    link: 'https://dribbble.com/shots/example',
-    tags: ['design', 'ui'],
-    createdAt: '2024-09-15T00:00:00Z'
-  },
-  {
-    _id: '6',
-    title: 'TypeScript Tutorial',
-    type: 'video',
-    link: 'https://youtube.com/watch?v=typescript',
-    tags: ['coding', 'typescript'],
-    createdAt: '2024-08-20T00:00:00Z'
-  }
-];
 
-useEffect(()=>{
-   
 
-  const fetchData=async()=>{
-     
-    const response=await axios.post('http://localhost:3000/content');
-
-  }
-},[])
 
 
 const Dashboard = () => {
-  const [contents, setContents] = useState<Content[]>(demoContents);
-  const [filteredContents, setFilteredContents] = useState<Content[]>(demoContents);
+  const [contents, setContents] = useState<Content[]>([]);
+  const [filteredContents, setFilteredContents] = useState<Content[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [showAddModal, setShowAddModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareLink, setShareLink] = useState('');
   const [copied, setCopied] = useState(false);
+
+
+  useEffect(()=>{
+   
+
+  const fetchData=async()=>{
+    try {
+      const token=localStorage.getItem("token")
+      const response=await axios.get('http://localhost:3000/api/content/fetchContent',
+        {
+          headers:{
+            Authorization:`Bearer ${token}`
+          }
+        }
+      );
+
+      if(response.status==200){
+        setContents(response.data);
+        setFilteredContents(response.data);
+      }
+      
+    } catch(error){
+      console.error("Content error: ",error);
+    };
+  }
+
+
+
+  fetchData();
+
+},[])
 
   const [formData, setFormData] = useState({
     title: '',
@@ -91,29 +63,79 @@ const Dashboard = () => {
     setFilteredContents(type === 'all' ? contents : contents.filter(c => c.type === type));
   };
 
-  const handleAddContent = (e: React.MouseEvent) => {
+  const handleAddContent = async(e: React.MouseEvent) => {
     e.preventDefault();
-    const tagsArray = formData.tags.split(',').map(t => t.trim()).filter(t => t);
-    const newContent: Content = {
-      _id: Date.now().toString(),
-      title: formData.title,
-      type: formData.type,
-      link: formData.link,
-      tags: tagsArray,
-      createdAt: new Date().toISOString()
-    };
-    const updatedContents = [newContent, ...contents];
-    setContents(updatedContents);
-    setFilteredContents(activeFilter === 'all' ? updatedContents : updatedContents.filter(c => c.type === activeFilter));
-    setFormData({ title: '', type: 'tweet', link: '', tags: '' });
-    setShowAddModal(false);
+    const tagsArray:Tags[]= formData.tags.split(',').map(t => t.trim()).filter(t =>t!=='').map(t=>({id:t,title:t}));
+    
+    try{
+      const token=localStorage.getItem("token");
+
+      const response=await axios.post('http://localhost:3000/api/content/addContent',
+        {
+          title:formData.title,
+          type:formData.type,
+          link:formData.link,
+          tags:tagsArray.map(tag=>tag.title)
+        },
+        {
+          headers:{
+            Authorization:`Bearer ${token}`,
+          },
+        }
+      );
+      
+      if(response.data===200|| response.status===201){
+
+        const newContent:Content=response.data;
+
+        const updatedContents=[newContent,...contents];
+         
+        setContents(updatedContents);
+
+        setFilteredContents(activeFilter==='all'
+          ?updatedContents
+          :updatedContents.filter(c=>c.type===activeFilter)
+        )
+
+        setFormData({title:'',type:'tweet',link:'',tags:''});
+        setShowShareModal(false);
+         
+      }
+
+    }catch(error){
+     console.error('Error adding content:',error);
+    }
+
+    
   };
 
-  const handleDelete = (id: string) => {
-    if (!confirm('Are you sure you want to delete this item?')) return;
-    const updatedContents = contents.filter(c => c._id !== id);
-    setContents(updatedContents);
-    setFilteredContents(activeFilter === 'all' ? updatedContents : updatedContents.filter(c => c.type === activeFilter));
+  const handleDelete = async(id: string) => {
+    if (!confirm("Are you sure you want to delete this item?")) return;
+
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.delete(`http://localhost:3000/api/content/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {} 
+    });
+
+    if (response.status === 200||response.status === 201) {
+      
+      const updatedContents = contents.filter(c => c.id !== id);
+      setContents(updatedContents);
+      setFilteredContents(
+        activeFilter === "all"
+          ? updatedContents
+          : updatedContents.filter(c => c.type === activeFilter)
+      );
+      
+    }
+  } catch (error) {
+    console.error("Error deleting content:", error);
+  }
   };
 
   const handleShareBrain = () => {
@@ -157,7 +179,7 @@ const Dashboard = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredContents.map(c => (
-                <ContentCard key={c._id} content={c} handleDelete={handleDelete} />
+                <ContentCard key={c.id} content={c} handleDelete={handleDelete} />
               ))}
             </div>
           )}
