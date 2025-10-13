@@ -27,10 +27,12 @@ model User{
 }
 
 enum ContentType{
-  image
+  
+  tweet
   video
-  article
-  audio
+  document
+  link
+
 }
 
 
