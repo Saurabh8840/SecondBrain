@@ -18,6 +18,7 @@ const ContentCard: React.FC<Props> = ({ content, handleDelete }) => {
     }
   };
 
+
   return (
     <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all group">
       <div className="flex justify-between items-start mb-4">
@@ -26,13 +27,15 @@ const ContentCard: React.FC<Props> = ({ content, handleDelete }) => {
           <span className="text-sm text-gray-400 capitalize">{content.type}</span>
         </div>
         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button onClick={() => handleDelete(content._id)} className="p-2 hover:bg-red-500/20 rounded-lg transition-all">
+          <button onClick={() => handleDelete(content.id)} className="p-2 hover:bg-red-500/20 rounded-lg transition-all">
             <Trash2 className="w-4 h-4 text-red-400" />
           </button>
-        </div>
+        </div> 
       </div>
+      
+    
 
-      <h3 className="text-white font-semibold mb-2">{content.title}</h3>
+      <h3 className="text-white font-semibold mb-2">{content.title}</h3> 
       {content.link && (
         <a href={content.link} target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 text-sm mb-3 block truncate">
           {content.link}
@@ -42,7 +45,7 @@ const ContentCard: React.FC<Props> = ({ content, handleDelete }) => {
       {content.tags.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-3">
           {content.tags.map((tag, idx) => (
-            <span key={idx} className="px-2 py-1 bg-purple-600/30 text-purple-300 text-xs rounded-full">#{tag}</span>
+            <span key={tag.id||idx} className="px-2 py-1 bg-purple-600/30 text-purple-300 text-xs rounded-full">#{tag.title}</span>
           ))}
         </div>
       )}
