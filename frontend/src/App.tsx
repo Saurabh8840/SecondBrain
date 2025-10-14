@@ -4,6 +4,7 @@ import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import Dashboard from "./pages/Dashboard"
 import AnimatedBackground from "./components/AnimatedBackground"
+import SharedView from "./pages/SharedView"
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/share/:hash" element={<SharedView />} />
           </Routes>
         </div>
       </div>

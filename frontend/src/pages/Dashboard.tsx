@@ -20,10 +20,7 @@ const Dashboard = () => {
   const [shareLink, setShareLink] = useState('');
   const [copied, setCopied] = useState(false);
 
-
   useEffect(()=>{
-   
-
   const fetchData=async()=>{
     try {
       const token=localStorage.getItem("token")
@@ -66,7 +63,7 @@ const Dashboard = () => {
   const handleAddContent = async(e: React.MouseEvent) => {
     e.preventDefault();
     const tagsArray:Tags[]= formData.tags.split(',').map(t => t.trim()).filter(t =>t!=='').map(t=>({id:t,title:t}));
-    
+    alert("wait updating dashboard...");
     try{
       const token=localStorage.getItem("token");
 
@@ -85,6 +82,8 @@ const Dashboard = () => {
       );
       
       if(response.data===200|| response.status===201){
+         
+        setShowAddModal(false);
 
         const newContent:Content=response.data;
 
@@ -97,9 +96,7 @@ const Dashboard = () => {
           :updatedContents.filter(c=>c.type===activeFilter)
         )
 
-        setFormData({title:'',type:'tweet',link:'',tags:''});
-        setShowShareModal(false);
-         
+        setFormData({title:'',type:'tweet',link:'',tags:''});         
       }
 
     }catch(error){
@@ -138,10 +135,38 @@ const Dashboard = () => {
   }
   };
 
-  const handleShareBrain = () => {
-    const demoHash = Math.random().toString(36).substring(7);
-    setShareLink(`${window.location.origin}/shared/${demoHash}`);
-    setShowShareModal(true);
+  const handleShareBrain = async() => {
+    
+    try {
+      const token=localStorage.getItem("token");
+      if(!token){
+        alert("please login first");
+        return;
+      }
+      
+      
+      setShowShareModal(true); 
+      alert("generating link");
+
+      const response=await axios.post("http://localhost:3000/api/brain/all",
+        {},
+        {
+          headers:{
+            Authorization:`Bearer ${token}`,
+          },
+        }
+      );
+
+      if(response.status===200&& response.data.url){
+        setShareLink(response.data.url)
+      }else{
+        setShareLink("Failed to generate share link");
+      }
+
+
+    } catch (error) {
+      console.error("Error sharing brain:", error);
+    }
   };
 
   const copyToClipboard = () => {
@@ -150,12 +175,36 @@ const Dashboard = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+
+  // Inside Dashboard component
+const handleLogout = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    
+    await axios.post(
+      "http://localhost:3000/api/auth/logout",
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      }
+    );
+
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  } catch (err) {
+    console.error("Logout failed:", err);
+    alert("Failed to logout. Try again.");
+  }
+};
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <AnimatedBackground />
 
       <div className="relative flex h-screen">
-        <Sidebar activeFilter={activeFilter} filterContent={filterContent} />
+        <Sidebar activeFilter={activeFilter} onLogout={handleLogout} filterContent={filterContent} />
 
         <div className="flex-1 overflow-auto p-8">
           <div className="flex flex-wrap justify-between items-center mb-8 gap-4">
@@ -169,6 +218,7 @@ const Dashboard = () => {
               <button onClick={() => setShowAddModal(true)} className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg text-white font-semibold transition-all shadow-lg">
                 Add Content
               </button>
+              
             </div>
           </div>
 

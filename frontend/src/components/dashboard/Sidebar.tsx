@@ -4,9 +4,10 @@ import { Brain, X, Video, FileText, Link2, Hash, LogOut,  } from 'lucide-react';
 interface SidebarProps {
   activeFilter: string;
   filterContent: (type: string) => void;
+  onLogout: () => void; 
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeFilter, filterContent }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeFilter, filterContent ,onLogout}) => {
   const sidebarItems = [
     { icon: X, label: 'Tweets', filter: 'tweet' },
     { icon: Video, label: 'Videos', filter: 'video' },
@@ -48,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeFilter, filterContent }) => {
       </nav>
 
       <button
-        onClick={() => alert('Logout clicked')}
+        onClick={onLogout}
         className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-white/5 transition-all"
       >
         <LogOut className="w-5 h-5" />
