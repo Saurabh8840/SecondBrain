@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
+import env from "dotenv"
+
+env.config();
 
 const prisma = new PrismaClient();
 
@@ -14,7 +17,7 @@ export const shareAll = async (req: Request, res: Response) => {
       data: { hash, userId },
     });
 
-    const url = `https://yourapp.com/share/${hash}`;
+    const url = `${process.env.FRONTEND_URL}/share/${hash}`;
     res.json({ message: "Share link created!", url });
   } catch (err) {
     console.error(err);
@@ -37,7 +40,7 @@ export const shareOne = async (req: Request, res: Response) => {
       data: { hash, userId, contentId: Number(contentId) },
     });
 
-    const url = `https://yourapp.com/share/${hash}`;
+    const url = `${process.env.FRONTEND_URL}/share/${hash}`;
     res.json({ message: "Share link created!", url });
   } catch (err) {
     console.error(err);

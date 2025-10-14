@@ -186,7 +186,7 @@ const generateAccessTokenAndRefreshToken = async (
   }
 };
 
-// 🟢 REGISTER USER
+
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
   const schema = z.object({
     username: z.string().min(3).max(20),
@@ -223,7 +223,6 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
   });
 };
 
-// 🟣 LOGIN USER
 export const loginUser = async (req: Request, res: Response): Promise<Response> => {
   const schema = z.object({
     email: z.string().email(),
@@ -256,7 +255,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
   };
 
   res.cookie("accessToken", accessToken, options);
-  res.cookie("refreshToken", refreshToken, options);
+  // res.cookie("refreshToken", refreshToken, options);
 
   return res.status(200).json({
     message: "User logged in successfully",
@@ -268,3 +267,30 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
     accessToken,
   });
 };
+
+
+// Logout user
+export const logoutUser = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    //@ts-ignore
+    const userId = req.user?.id; // optional: if you want to remove refresh token in DB
+
+    if (userId) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { refreshToken: null },
+      });
+    }
+
+    // Clear cookies
+    res.clearCookie("accessToken");
+    // res.clearCookie("refreshToken"); // uncomment if using refresh token cookie
+
+    return res.status(200).json({ message: "User logged out successfully" });
+  } catch (err) {
+    console.error("Logout error:", err);
+    return res.status(500).json({ message: "Something went wrong during logout" });
+  }
+};
+
+
