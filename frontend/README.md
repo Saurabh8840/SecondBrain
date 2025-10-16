@@ -1,73 +1,121 @@
-# React + TypeScript + Vite
+🧠 SecondBrain — Your Smart Knowledge Organizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SecondBrain is a full-stack productivity app that helps users save and organize their digital content — including articles, tweets, YouTube videos, and documents — all in one place.
+It allows secure login, smart categorization by tags, and easy content sharing with others.
 
-Currently, two official plugins are available:
+🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🔐 Authentication System — Secure login & signup using JWT and middleware protection
 
-## React Compiler
+🧩 Add & Manage Content — Save tweets, videos, documents, and links
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🏷️ Tag Filtering — Organize content using smart tags
 
-## Expanding the ESLint configuration
+🧠 Share Your Brain — Generate a shareable link of all your content
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+🎨 Modern UI — Sleek dark theme with smooth gradients and responsive design
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+⚡ Optimized with Axios — For efficient data fetching & API integration
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+🖼️ Project Demo
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Here’s how SecondBrain looks in action 👇
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Dashboard	Add Content
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+	
+Share Brain	Authentication	Responsive UI
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+	
+	
+🏗️ Tech Stack
+🖥️ Frontend
+
+React + TypeScript
+
+Axios (API calls)
+
+Tailwind CSS (styling)
+
+Lucide-React Icons
+
+⚙️ Backend
+
+Node.js + Express
+
+Prisma ORM + PostgreSQL
+
+JWT Authentication
+
+Zod Validation
+
+
+⚡ Setup Instructions
+1️⃣ Clone the repository
+git clone https://github.com/yourusername/secondbrain.git
+cd secondbrain
+
+2️⃣ Backend setup
+cd backend
+npm install
+npx prisma migrate dev
+npm run dev
+
+3️⃣ Frontend setup
+cd frontend
+npm install
+npm run dev
+
+4️⃣ Environment Variables
+
+Make sure to create a .env file in both backend and frontend folders.
+
+Example backend .env:
+
+DATABASE_URL=postgresql://user:password@localhost:5432/secondbrain
+JWT_SECRET=your_secret_key
+PORT=3000
+
+
+Example frontend .env:
+
+VITE_API_URL=http://localhost:3000/api
+
+🔐 Authentication Flow
+
+User registers or logs in.
+
+A JWT token is saved in localStorage.
+
+All subsequent API calls include the Authorization: Bearer <token> header.
+
+Logout removes token and redirects to login.
+
+🧩 API Endpoints
+Endpoint	Method	Description
+/api/auth/register	POST	Register new user
+/api/auth/login	POST	Login existing user
+/api/auth/logout	POST	Logout user
+/api/content/addContent	POST	Add a new content item
+/api/content/fetchContent	GET	Fetch all user contents
+/api/content/delete/:id	DELETE	Delete content by ID
+/api/brain/all	POST	Generate shareable brain link
+🧠 Future Improvements
+
+🔍 Global search by tags or title
+
+📅 Content scheduling / reminders
+
+📎 File upload support
+
+🌐 Public profile pages for shared brains
+
+💡 Author
+
+👩‍💻 Created by Sakshi
+Frontend + Backend Developer | Passionate about building efficient and clean full-stack products
+
+⭐ Support
+
+If you like this project, please star ⭐ the repository and share it!
+Feedback and contributions are welcome 💬
