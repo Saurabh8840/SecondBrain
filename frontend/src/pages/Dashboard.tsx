@@ -12,13 +12,14 @@ import axios from 'axios';
 
 
 const Dashboard = () => {
-  const [contents, setContents] = useState<Content[]>([]);
-  const [filteredContents, setFilteredContents] = useState<Content[]>([]);
-  const [activeFilter, setActiveFilter] = useState<string>('all');
-  const [showAddModal, setShowAddModal] = useState(false);
+   const [showAddModal, setShowAddModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareLink, setShareLink] = useState('');
   const [copied, setCopied] = useState(false);
+  const [contents, setContents] = useState<Content[]>([]);
+  const [filteredContents, setFilteredContents] = useState<Content[]>([]);
+  const [activeFilter, setActiveFilter] = useState<string>('all');
+ 
 
   useEffect(()=>{
   const fetchData=async()=>{
